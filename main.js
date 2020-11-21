@@ -40,6 +40,7 @@ function createWindow() {
     slashes: true
   } ) )
 
+  // lancement
   win.once( 'ready-to-show', () => {
     win.show()
   } )

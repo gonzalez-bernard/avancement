@@ -1,0 +1,11 @@
+{
+  "python.pythonPath": "env/bin/python",
+  "java.debug.settings.stepping.skipClasses": [
+  
+  ],
+  
+  "python.linting.pylintArgs": [
+    "--init-hook",
+    "import sys; sys.path.append('/home/speedy/developpement/electron/avancement')"
+]
+}
