@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Avancement</title>
+    <!--
+         'unsafe-eval' 'unsafe-inline'
+    https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.js
+    https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js 
+    https://polyfill.io/v3/polyfill.min.js
+    https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"/>
+
+    -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' " />
+
+    <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="style.css" rel="stylesheet" />
+    <!-- <link href="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.1.min.css" rel="stylesheet" type="text/css"> -->
+    </meta>
+    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> -->
+    <!-- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+    <script id="MathJax-script" async src="node_modules/mathjax//es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <ul class='nav nav-tabs'>
+            <li class='nav-item'>
+                <a id="mnu_introduction" class="nav-link active" data-toggle='tab' href=' #introduction'> Introduction</a>
+            </li>
+            <li class='nav-item'>
+                <a id="mnu_equation" class="nav-link disabled disabledTab" data-toggle='tab' href='#equation'> Equation</a>
+            </li>
+            <li class='nav-item'>
+                <a id="mnu_avancement" class="nav-link disabled disabledTab" data-toggle='tab' href='#avancement'> Avancement</a>
+            </li>
+            <li class='nav-item'>
+                <a id="mnu_tab_avancement" class="nav-link disabled disabledTab" data-toggle='tab' href='#tab_avancement'> Tableau d'Avancement</a>
+            </li>
+            <li class='nav-item'>
+                <a id="mnu_evolution" class="nav-link disabled disabledTab" data-toggle='tab' href='#evolution'>Evolution</a>
+            </li>
+            <li class='nav-item'>
+                <a id='mnu_problem' class="nav-link disabled disabledTab" data-toggle='tab' href='#problem'>Problèmes</a>
+            </li>
+            <li class='nav-item' style='display:none'>
+                <a id="mnu_identif" class="nav-link" data-toggle='tab' href=' #identif'>Identification</a>
+            </li>
+            <li class='nav-item'>
+                <a class="nav-link" data-toggle='tab' href='#aide'> Aide</a>
+            </li>
+        </ul>
+        <div class='tab-content'>
+            <div class='tab-pane fade show active' id='introduction'>
+            </div>
+            <div class='tab-pane fade' id='equation'>
+            </div>
+            <div class='tab-pane fade' id='avancement'>
+            </div>
+            <div class='tab-pane fade' id="tab_avancement">
+            </div>
+            <div class='tab-pane fade' id='evolution'>
+            </div>
+            <div class='tab-pane fade' id='problem'>
+            </div>
+            <div class='tab-pane fade' style='display:None' id='identification'>
+            </div>
+            <div class='tab-pane fade' id='aide'>
+            </div>
+        </div>
+        <script type="text/javascript">
+            window.$ = window.jQuery = require('jquery');
+            require('jquery-validation');
+            window.popper = require('./node_modules/popper.js/dist/umd/popper.js');
+            require('./node_modules/bootstrap/dist/js/bootstrap.js');
+
+            require('./introduction/intro_ui.js');
+            require('./identification/identification_ui.js');
+            require('./equation/equation_ui.js');
+            require('./avancement/avancement_ui.js');
+            require('./tab_avancement/tab_ui.js');
+            require('./evolution/evolution_ui.js');
+            require('./problem/problem_ui.js');
+            require('./aide/aide_ui.js');
+
+            function valid_input(e) {
+                console.log("valid")
+            }
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                if (e.target.id == 'mnu_problem') {
+                    init_problem()
+                }
+            })
+
+            init_problem()
+        </script>
+        <script src="node_modules/bokeh/bokeh-2.2.3.min.js"></script>
+        <script src="node_modules/bokeh/bokeh-widgets-2.2.3.min.js"></script>
+        <!--
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.1.js"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.1.min.js"></script>
+        -->
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            $('.example-popover').popover({
+                container: 'body'
+            })
+        })
+
+        $(function() {
+            $("[data-hide]").on("click", function() {
+                $(this).closest("." + $(this).attr("data-hide")).hide()
+            })
+        })
+    </script>
+</body>
+
+</html>

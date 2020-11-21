@@ -1,0 +1,8 @@
+Principe de fonctionnement
+
+main.js est le point d'entrée, il charge le fichier index.html
+Dans index.html, on charge les scripts interface/xxx.js
+Ces scripts gèrent les événements et lance un message (ipc.send) intercepté par main.js
+main.js charge un script js/xxx.js
+Ce script utilise python-shell pour lance le script python.
+A la réception un événement est déclenché et intercepté par interface/xxx.js qui actualise l'interface
