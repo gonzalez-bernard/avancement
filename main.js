@@ -40,7 +40,7 @@ function createWindow() {
     slashes: true
   } ) )
 
-  // lancement
+  // lancemen
   win.once( 'ready-to-show', () => {
     win.show()
   } )
@@ -120,4 +120,4 @@ app.on( 'activate', () => {
         */
     }
   } )
-  // Dans ce fichier, vous pouvez inclure le reste de votre code spécifique au processus principal. Vous pouvez également le mettre dans des fichiers séparés et les inclure ici
+  // Dans ce fichier, vous pouvez inclure le reste de votre code spécifique au processus principal. Vous pouvez également le mettre dans des fichiers séparés et les inclure icit
