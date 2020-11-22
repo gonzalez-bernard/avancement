@@ -1,10 +1,16 @@
-"name": "Python: Current File (Integrated Terminal)",
-"type": "python",
-"request": "launch",
-"program": "${file}",
-"cwd": "${workspaceRoot}",
-"env": {"PYTHONPATH": "${workspaceRoot}"},
-"console": "integratedTerminal",
-"env": {"PYTHONPATH": "${workspaceRoot};${workspaceRoot}/modules;${workspaceRoot}/modules/somePrj/modules"}
+{
+  "version": "0.1.0",
+  "configutations":[
+    {
+      "name": "Python: Current File (Integrated Terminal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "env": {"PYTHONPATH": "${workspaceRoot};${workspaceRoot}/modules"}
+    }
+  ]
+}
 
 

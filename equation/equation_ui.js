@@ -15,6 +15,7 @@ var cts = require( "../constantes.js" )
 var txt = require( "./lang_" + cts.SUFFIXE_LANG + ".js" )
 var current_equation
 var eq_num_test = 0 // nombre de test
+var init_avancement = require( '../avancement/avancement_ui.js' ).init_avancement
 
 
 // Appel à Python pour récupérer liste des équations
@@ -23,7 +24,7 @@ let getEquations = function() {
 }
 
 // Action sur selection d'une equation
-let selectEquation = function( event ) {
+let selectEquation = function() {
 
   // enregistrement équation
   let id = this.selectedOptions[ 0 ].value
@@ -101,7 +102,7 @@ let selectEquation = function( event ) {
 }
 
 // Vérifications des coefficients
-let verif_coeffs = function( event ) {
+let verif_coeffs = function() {
 
   // appel fonction de vérification
   let r = _verif_coeffs()
@@ -168,10 +169,10 @@ let set_lstEquations = function( data ) {
   sessionStorage.setItem( "lst_equations", JSON.stringify( lst_equations ) )
 
   // construit la liste d'options
-  lst = []
+  let lst = []
   let counter = 0
   lst_equations.forEach( function( item ) {
-    eq = JSON.parse( item )
+    let eq = JSON.parse( item )
     let x = { 'label': eq[ 'equation_non_equilibree' ], 'value': counter }
     lst.push( x )
     counter++
@@ -190,7 +191,7 @@ ipc.on( 'getEquations_ok', function( event, data ) {
 } )
 
 
-init_equation = function() {
+exports.init_equation = function() {
   // Affiche contenu
   $( "#equation" ).html( msg.EQ_HTML_EQUATION )
 

@@ -1,13 +1,17 @@
-from Problem import Problem
+"""
+Récupération problème
+"""
 import json
 import sys
+from Problem import Problem
 
-s = Problem()
+
+_pb = Problem()
 
 if len(sys.argv)>1:
-  e = json.loads(sys.argv[1])
-  html = s.getProblem(e)
+    data = json.loads(sys.argv[1])
+    html = _pb.getProblem(data)
 else:
-  html = s.getProblem()
+    html = _pb.getProblem()
 
 print(json.dumps(html))

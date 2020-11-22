@@ -1,13 +1,17 @@
-import sys
-import json
-import py.classes.Database as DB
-import py.classes.Session as SESSION
+"""
+Module identification
+"""
 from datetime import datetime
-import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from py.utils import get_random_pwd
 from hashlib import md5
+
+import sys
+import smtplib
+import json
+from py.utils import get_random_pwd
+import py.classes.Database as DB
+import py.classes.Session as SESSION
 
 ERR_MAIL = "Une erreur inconnue s'est produite  lors de l'envoi du message"
 ERR_DATABASE = "Une erreur inconnue s'est produite  lors de l'accès à la base de données"
@@ -30,10 +34,10 @@ def connexion(nom: str, pwd: str) -> str(dict):
     try:
         users = dbase.execute(GET_USER.format(nom, pwd))
         if len(users) > 0:
-            user = DB.User()
-            user.set_fields(users[0])
+            _user = DB.User()
+            _user.set_fields(users[0])
             data.append({'id': users[0][0], 'nom': users[0][1]})
-            print(json.dumps(user.__dict__))
+            print(json.dumps(_user.__dict__))
         else:
             print(json.dumps([]))
 
@@ -55,15 +59,14 @@ def inscription(nom: str, pwd: str, email: str) -> str(dict):
         dbuser
     """
     ADD_USER = "insert into dbuser (nom, password, email) values ('{0}','{1}','{2}') "
-    GET_LAST_INDEX = "select last_insert_rowid()"
 
     try:
         result = dbase.execute(ADD_USER.format(nom, pwd, email), False)
         if result:
-            id = dbase.execute(GET_LAST_INDEX)[0][0]
-            user = DB.User(_id=id, _nom=nom, _email=email)
-            user.set_password(pwd)
-            print(json.dumps(user.__dict__))
+            id_user = dbase.execute(GET_LAST_INDEX)[0][0]
+            _user = DB.User(_id=id_user, _nom=nom, _email=email)
+            _user.set_password(pwd)
+            print(json.dumps(_user.__dict__))
     except DB.DbError as err:
         print(json.dumps(str(err)))
 
@@ -73,7 +76,7 @@ def inscription(nom: str, pwd: str, email: str) -> str(dict):
 
 def new_session(id_user: str) -> str(dict):
     """Enregistre une nouvelle session
-    
+
     Args:
         id_user (str): id de l'utilisateur
 
@@ -84,42 +87,42 @@ def new_session(id_user: str) -> str(dict):
         date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         result = dbase.execute(ADD_SESSION.format(datas['id_user'], date), False)
         if result:
-            id = dbase.execute(GET_LAST_INDEX)[0][0]
-            session = SESSION.Session(_id=id, _id_user=datas['id_user'], _date=date)
+            id_session = dbase.execute(GET_LAST_INDEX)[0][0]
+            session = SESSION.Session(_id=id_session, _id_user=id_user, _date=date)
             print(json.dumps(session.__dict__))
-    except DB.DbError as err:
+    except DB.DbError:
         print(json.dumps({'error': 'new_session'}))
 
 
-def compare_mail(nom: str,email: str) -> dbuser:
-   """Cherche l'existence d'un utilisateur dans la base
-   
+def compare_mail(nom: str,email: str) -> list(tuple):
+    """Cherche l'existence d'un utilisateur dans la base
+
    Args:
        nom (str): nom
        email (str): email
-   
+
    Returns:
        bool: si existe renvoie user sous la forme [(id:...,...)]
-   """
-   try:
+    """
+    try:
         result = dbase.execute(GET_MAIL.format(nom, email), False)
         if result:
             return result
         return False
-    except DB.DbError as err:
+    except DB.DbError:
         return False
 
 
-def send_mail(email: str, cc: str = '', bcc: str = '', subject: str, message: str ) -> dict:
+def send_mail(email: str, subject: str, message: str, cc_adr: str = '', bcc_adr: str = '') -> dict:
     """Envoi un mail à l'adresse indiquée avec un nouveau mot de passe
-    
+
     Args:
         email (str): email destinataire
-        cc (str, optional): copie
-        bcc (str, optional): copie cachée
+        cc_adr (str, optional): copie
+        bcc_adr (str, optional): copie cachée
         subject (str): sujet
         message (str): message
-    
+
     Returns:
         dict:  message d'erreur ou password
     """
@@ -128,8 +131,8 @@ def send_mail(email: str, cc: str = '', bcc: str = '', subject: str, message: st
     message = MIMEMultipart()
     message['From'] = FROM
     message['To'] = email
-    message['CC'] = cc
-    message['BCC'] = bcc
+    message['CC'] = cc_adr
+    message['BCC'] = bcc_adr
     message['Subject'] = subject
     pwd = get_random_pwd(10)
     msg = message + "<b>" + pwd + "</b>"
@@ -137,27 +140,27 @@ def send_mail(email: str, cc: str = '', bcc: str = '', subject: str, message: st
     message.attach(MIMEText(msg.encode('utf-8'), 'html', 'utf-8'))
 
     texte = message.as_string().encode('utf-8')
-    Toadds = [to] + [cc] + [bcc]
+    to_adds = [email] + [cc_adr] + [bcc_adr]
 
     try:
         serveur = smtplib.SMTP('smtp.gmail.com', 587)
         serveur.starttls()
         serveur.login(FROM, "celmdpdmdtg1")
-        serveur.sendmail(FROM, Toadds, texte)
+        serveur.sendmail(FROM, to_adds, texte)
         serveur.quit()
         return {"success": pwd}
 
-    except smtplib.SMTPException as e:
+    except smtplib.SMTPException:
         return {"error": ERR_MAIL}
 
 
 def update_pwd(user_id: str, pwd: str) -> dict:
     """Met à jour le mot de passe dans la base
-    
+
     Args:
         user (str): id user
         pwd (str): pass
-    
+
     Returns:
         dict: message ou password
     """
@@ -169,7 +172,7 @@ def update_pwd(user_id: str, pwd: str) -> dict:
             return {"success": pwd}
         else:
             return {"error": 'update_pwd'}
-    except DB.DbError as err:
+    except DB.DbError:
         return {"error": ERR_DATABASE}
 
 
@@ -189,7 +192,8 @@ elif func == 'new_session':
 elif func == 'recover':
     user = compare_mail(datas['nom'], datas['email'])
     if user:
-        r = send_mail(email = datas['email'],   subject = datas['subject'], message = datas['message'])
+        r = send_mail(email = datas['email'], subject = datas['subject'], \
+        message = datas['message'])
         if 'success' in r:
             r = update_pwd(user[0][0], r['success'])
         print(json.dumps(r))

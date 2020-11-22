@@ -284,7 +284,7 @@ class Equations:
         return equa
 
     @staticmethod
-    def get_equations():
+    def get_equations() -> list:
         """Récupère liste des équations à partir du fichier
 
         Crée la structure pour chaque équation présente dans le fichier csv
@@ -305,12 +305,15 @@ class Equations:
                     equa.get_equation_equilibree()
 
                     equations.append(equa)
+        
+            return equations
+
         except OSError:
             raise OSError
         except ValueError:
             raise ValueError
 
-        return equations
+        
 
 
 class Equation:
